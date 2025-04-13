@@ -282,50 +282,27 @@ function Customizer() {
         }
   })
 
+  // Mount effect
   React.useEffect(() => {
     setMounted(true)
   }, [])
 
+  // Update theme type when config changes
   React.useEffect(() => {
-    // Update the themeType when config.theme changes
     setThemeType(config.theme === 'custom' ? 'custom' : 'predefined')
   }, [config.theme])
 
-  // Add effect to handle theme changes
-  React.useEffect(() => {
-    if (config.theme === 'custom') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light'
-      const currentMode = mode === 'system' ? systemTheme : mode
-
-      const root = document.documentElement
-      Object.entries(customTheme.cssVars[currentMode]).forEach(
-        ([key, value]) => {
-          root.style.setProperty(`--${key}`, value as string)
-        }
-      )
-    }
-  }, [mode, config.theme, customTheme.cssVars])
-
-  const handleThemeVarChange = (
-    targetMode: 'light' | 'dark',
-    key: string,
-    value: string
-  ) => {
-    // Get the actual current mode based on system preference when in system mode
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-      .matches
-      ? 'dark'
-      : 'light'
+  const handleThemeVarChange = (targetMode: 'light' | 'dark', key: string, value: string) => {
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     const effectiveMode = mode === 'system' ? systemTheme : mode
 
+    // Update config to custom theme
     setConfig({
       ...config,
       theme: 'custom',
     })
 
+    // Update custom theme
     setCustomTheme((prev: CustomTheme) => {
       const updated = {
         ...prev,
@@ -337,17 +314,16 @@ function Customizer() {
           },
         },
       }
+      
+      // Save to localStorage
       localStorage.setItem('custom-theme', JSON.stringify(updated))
 
-      // Apply all theme variables when the mode matches
+      // Apply variables if we're modifying the current mode
       if (targetMode === effectiveMode) {
         const root = document.documentElement
-        // Apply all variables for the current mode to ensure text and other elements are visible
-        Object.entries(updated.cssVars[targetMode]).forEach(
-          ([cssKey, cssValue]) => {
-            root.style.setProperty(`--${cssKey}`, cssValue as string)
-          }
-        )
+        Object.entries(updated.cssVars[targetMode]).forEach(([cssKey, cssValue]) => {
+          root.style.setProperty(`--${cssKey}`, cssValue as string)
+        })
       }
 
       return updated

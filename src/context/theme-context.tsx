@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -28,63 +28,81 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, _setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
+  );
 
-  // Update theme applying logic
-  const applyTheme = (newTheme: string) => {
+  // Apply theme colors and custom theme if applicable
+  const applyThemeColors = useCallback(() => {
     const root = document.documentElement;
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const effectiveTheme = newTheme === 'system' ? systemTheme : newTheme;
+    const effectiveTheme = theme === 'system' ? systemTheme : theme;
     
     root.classList.remove('light', 'dark');
     root.classList.add(effectiveTheme);
 
-    // If using custom theme, apply all theme variables
+    // Check for custom theme
     const customTheme = localStorage.getItem('custom-theme');
-    const config = localStorage.getItem('shadcn-ui:theme');
-    const currentTheme = config ? JSON.parse(config).theme : null;
-
-    if (customTheme && currentTheme === 'custom') {
-      const themeData = JSON.parse(customTheme);
-      Object.entries(themeData.cssVars[effectiveTheme]).forEach(([key, value]) => {
-        root.style.setProperty(`--${key}`, value as string);
-      });
+    const configStr = localStorage.getItem('config');
+    
+    if (customTheme && configStr) {
+      const config = JSON.parse(configStr);
+      if (config.theme === 'custom') {
+        try {
+          const themeData = JSON.parse(customTheme);
+          // Apply all CSS variables for the current theme mode
+          Object.entries(themeData.cssVars[effectiveTheme]).forEach(([key, value]) => {
+            root.style.setProperty(`--${key}`, value as string);
+          });
+        } catch (error) {
+          console.error('Error applying custom theme:', error);
+        }
+      }
     }
-  }
+  }, [theme]);
 
-  // Effect for theme changes
+  // Initialize theme immediately on mount
   useEffect(() => {
-    applyTheme(theme)
-  }, [theme, applyTheme])
+    const init = () => {
+      applyThemeColors();
+    };
+    
+    // Run initialization
+    init();
+
+    // Also set up a small delay to ensure proper application after hydration
+    const timer = setTimeout(init, 0);
+    return () => clearTimeout(timer);
+  }, [applyThemeColors]);
 
   // Handle system theme changes
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
       if (theme === 'system') {
-        applyTheme('system');
+        applyThemeColors();
       }
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [theme]);
+  }, [theme, applyThemeColors]);
 
   const setTheme = (theme: Theme) => {
-    localStorage.setItem(storageKey, theme)
-    _setTheme(theme)
-  }
+    localStorage.setItem(storageKey, theme);
+    _setTheme(theme);
+    // Apply theme colors immediately when theme changes
+    setTimeout(() => applyThemeColors(), 0);
+  };
 
   const value = {
     theme,
     setTheme,
-  }
+  };
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
     </ThemeProviderContext.Provider>
-  )
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
