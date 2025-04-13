@@ -33,6 +33,7 @@ export function ThemeWrapper({
     const cssVars = currentTheme.cssVars[effectiveTheme]
     
     Object.entries(cssVars).forEach(([key, value]) => {
+      if (key === 'radius') return // Skip radius as we handle it separately
       root.style.setProperty(`--${key}`, value)
     })
 
