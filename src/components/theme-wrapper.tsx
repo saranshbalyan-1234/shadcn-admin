@@ -24,19 +24,26 @@ export function ThemeWrapper({
     const currentTheme = baseColors.find((t) => t.name === config.theme)
     if (!currentTheme) return
 
+    // Get the effective theme based on system preference
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const effectiveTheme = theme === 'system' ? systemTheme : theme
+
     // Apply theme CSS variables
     const root = document.documentElement
-    const cssVars = currentTheme.cssVars[theme === "dark" ? "dark" : "light"]
+    const cssVars = currentTheme.cssVars[effectiveTheme]
     
     Object.entries(cssVars).forEach(([key, value]) => {
       root.style.setProperty(`--${key}`, value)
     })
+
+    // Apply theme class
+    root.classList.remove('light', 'dark')
+    root.classList.add(effectiveTheme)
   }, [config.radius, config.theme, theme])
 
   return (
     <div
       className={cn(
-        theme === "dark" ? "dark" : "",
         "w-full",
         className
       )}
