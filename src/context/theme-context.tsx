@@ -30,29 +30,45 @@ export function ThemeProvider({
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
 
-  useEffect(() => {
-    const root = window.document.documentElement
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  // Update theme applying logic
+  const applyTheme = (newTheme: string) => {
+    const root = document.documentElement;
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const effectiveTheme = newTheme === 'system' ? systemTheme : newTheme;
+    
+    root.classList.remove('light', 'dark');
+    root.classList.add(effectiveTheme);
 
-    const applyTheme = (theme: Theme) => {
-      root.classList.remove('light', 'dark') // Remove existing theme classes
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light'
-      const effectiveTheme = theme === 'system' ? systemTheme : theme
-      root.classList.add(effectiveTheme) // Add the new theme class
+    // If using custom theme, apply all theme variables
+    const customTheme = localStorage.getItem('custom-theme');
+    const config = localStorage.getItem('shadcn-ui:theme');
+    const currentTheme = config ? JSON.parse(config).theme : null;
+
+    if (customTheme && currentTheme === 'custom') {
+      const themeData = JSON.parse(customTheme);
+      Object.entries(themeData.cssVars[effectiveTheme]).forEach(([key, value]) => {
+        root.style.setProperty(`--${key}`, value as string);
+      });
     }
+  }
 
+  // Effect for theme changes
+  useEffect(() => {
+    applyTheme(theme)
+  }, [theme, applyTheme])
+
+  // Handle system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
       if (theme === 'system') {
-        applyTheme('system')
+        applyTheme('system');
       }
-    }
+    };
 
-    applyTheme(theme)
-
-    mediaQuery.addEventListener('change', handleChange)
-
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [theme])
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [theme]);
 
   const setTheme = (theme: Theme) => {
     localStorage.setItem(storageKey, theme)
