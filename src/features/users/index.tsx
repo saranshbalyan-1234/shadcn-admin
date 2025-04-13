@@ -18,11 +18,11 @@ export default function Users() {
   return (
     <UsersProvider>
       <Header fixed>
-        <Search />
+        {/* <Search />
         <div className='ml-auto flex items-center space-x-4'>
           <ThemeSwitch />
           <ProfileDropdown />
-        </div>
+        </div> */}
       </Header>
 
       <Main>

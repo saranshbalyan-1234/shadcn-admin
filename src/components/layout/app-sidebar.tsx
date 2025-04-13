@@ -8,11 +8,15 @@ import {
 import { NavGroup } from '@/components/layout/nav-group'
 import { NavUser } from '@/components/layout/nav-user'
 import { TeamSwitcher } from '@/components/layout/team-switcher'
+import { useLayout } from '@/context/layout-context'
 import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { layout } = useLayout()
+  const { side, variant, collapsible } = layout.sidebar
+
   return (
-    <Sidebar collapsible='icon' variant='floating' {...props}>
+    <Sidebar side={side} variant={variant} collapsible={collapsible} {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={sidebarData.teams} />
       </SidebarHeader>

@@ -158,9 +158,9 @@ export function ThemeSwitch() {
       <div className='hidden items-center md:flex'>
         <Popover>
           <PopoverTrigger asChild>
-            {/* <Button size="sm"> */}
+                      {/* <Button size="sm"> */}
             <MonitorCog className='h-4 w-4 cursor-pointer' />
-            {/* </Button> */}
+                      {/* </Button> */}
           </PopoverTrigger>
           <PopoverContent
             align='start'
@@ -474,48 +474,48 @@ function Customizer() {
             </TabsList>
             <TabsContent value='predefined'>
               <div className='grid grid-cols-3 gap-2'>
-                {baseColors.map((theme) => {
-                  const isActive = config.theme === theme.name
+            {baseColors.map((theme) => {
+              const isActive = config.theme === theme.name
 
-                  return mounted ? (
-                    <Button
+              return mounted ? (
+                <Button
                       variant={'outline'}
                       size='sm'
-                      key={theme.name}
-                      onClick={() => {
-                        setConfig({
-                          ...config,
-                          theme: theme.name,
-                        })
-                      }}
-                      className={cn(
+                  key={theme.name}
+                  onClick={() => {
+                    setConfig({
+                      ...config,
+                      theme: theme.name,
+                    })
+                  }}
+                  className={cn(
                         'justify-start',
                         isActive && 'border-2 border-primary'
-                      )}
-                      style={
-                        {
+                  )}
+                  style={
+                    {
                           '--theme-primary': `hsl(${
                             theme?.activeColor[
                               mode === 'dark' ? 'dark' : 'light'
                             ]
-                          })`,
-                        } as React.CSSProperties
-                      }
-                    >
-                      <span
-                        className={cn(
+                      })`,
+                    } as React.CSSProperties
+                  }
+                >
+                  <span
+                    className={cn(
                           'flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]'
-                        )}
-                      >
+                    )}
+                  >
                         {isActive && <Check className='h-4 w-4 text-white' />}
-                      </span>
-                      {theme.label}
-                    </Button>
-                  ) : (
+                  </span>
+                  {theme.label}
+                </Button>
+              ) : (
                     <Skeleton className='h-8 w-full' key={theme.name} />
-                  )
-                })}
-              </div>
+              )
+            })}
+          </div>
             </TabsContent>
             <TabsContent value='custom'>
               <div className='scrollbar-thin h-[30vh] space-y-4 overflow-y-auto pr-4'>
@@ -577,23 +577,23 @@ function Customizer() {
           <Label className='text-xs'>Radius</Label>
           <div className='grid grid-cols-5 gap-2'>
             {['0', '0.3', '0.5', '0.75', '1.0'].map((value) => (
-              <Button
+                <Button
                 variant={'outline'}
                 size='sm'
-                key={value}
-                onClick={() => {
-                  setConfig({
-                    ...config,
-                    radius: parseFloat(value),
-                  })
-                }}
-                className={cn(
-                  config.radius === parseFloat(value) &&
+                  key={value}
+                  onClick={() => {
+                    setConfig({
+                      ...config,
+                      radius: parseFloat(value),
+                    })
+                  }}
+                  className={cn(
+                    config.radius === parseFloat(value) &&
                     'border-2 border-primary'
-                )}
-              >
-                {value}
-              </Button>
+                  )}
+                >
+                  {value}
+                </Button>
             ))}
           </div>
         </div>

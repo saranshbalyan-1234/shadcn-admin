@@ -1,6 +1,7 @@
 import { Outlet } from '@tanstack/react-router'
 import {
   IconBrowserCheck,
+  IconLayoutDashboard,
   IconNotification,
   IconPalette,
   IconTool,
@@ -19,11 +20,11 @@ export default function Settings() {
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <Search />
+        {/* <Search />
         <div className='ml-auto flex items-center space-x-4'>
           <ThemeSwitch />
           <ProfileDropdown />
-        </div>
+        </div> */}
       </Header>
 
       <Main fixed>
@@ -64,6 +65,11 @@ const sidebarNavItems = [
     title: 'Appearance',
     icon: <IconPalette size={18} />,
     href: '/settings/appearance',
+  },
+  {
+    title: 'Layout',
+    icon: <IconLayoutDashboard size={18} />,
+    href: '/settings/layout',
   },
   {
     title: 'Notifications',

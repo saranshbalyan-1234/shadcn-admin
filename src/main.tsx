@@ -12,6 +12,7 @@ import { handleServerError } from '@/utils/handle-server-error'
 import { toast } from '@/hooks/use-toast'
 import { ThemeWrapper } from './components/theme-wrapper'
 import { FontProvider } from './context/font-context'
+import { LayoutProvider } from './context/layout-context'
 import { ThemeProvider } from './context/theme-context'
 import './index.css'
 // Generated Routes
@@ -102,7 +103,9 @@ if (!rootElement.innerHTML) {
         <ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
           <ThemeWrapper>
             <FontProvider>
-              <RouterProvider router={router} />
+              <LayoutProvider>
+                <RouterProvider router={router} />
+              </LayoutProvider>
             </FontProvider>
           </ThemeWrapper>
         </ThemeProvider>
