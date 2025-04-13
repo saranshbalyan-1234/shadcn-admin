@@ -28,7 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { baseColors } from "@/base-colors.ts"
+import { baseColors } from "@/base-colors"
 import {
   MonitorCog
 } from "lucide-react"
@@ -71,26 +71,30 @@ export function ThemeSwitch() {
         <div className="ml-2 hidden items-center gap-0.5">
           {mounted ? (
             <>
-              {["zinc", "rose", "blue", "green", "orange"].map((color) => {
-                const baseColor = baseColors.find(
-                  (baseColor) => baseColor.name === color
-                )
-                const isActive = config.theme === color
-
-                if (!baseColor) {
-                  return null
-                }
+              {baseColors.map((baseColor) => {
+                const isActive = config.theme === baseColor.name
 
                 return (
                   <Tooltip key={baseColor.name}>
                     <TooltipTrigger asChild>
                       <button
-                        onClick={() =>
-                          setConfig({
-                            ...config,
-                            theme: baseColor.name,
-                          })
-                        }
+                        onClick={() => {
+                          const selectedTheme = baseColors.find((t) => t.name === baseColor.name)
+                          if (!selectedTheme) return
+
+                          const themeRadius = (selectedTheme.cssVars.light as any).radius
+                          const parsedRadius = themeRadius ? parseFloat(themeRadius.replace('rem', '')) : 0.5
+                          const allowedRadii = [0, 0.3, 0.5, 0.75, 1.0]
+                          const radius = allowedRadii.reduce((prev, curr) => 
+                            Math.abs(curr - parsedRadius) < Math.abs(prev - parsedRadius) ? curr : prev
+                          )
+
+                          setConfig((prev) => ({
+                            ...prev,
+                            theme: selectedTheme.name,
+                            radius,
+                          }))
+                        }}
                         className={cn(
                           "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs",
                           isActive
