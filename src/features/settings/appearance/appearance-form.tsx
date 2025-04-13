@@ -26,7 +26,7 @@ const appearanceFormSchema = z.object({
   font: z.enum(fonts, {
     invalid_type_error: 'Select a font',
     required_error: 'Please select a font.',
-  })
+  }),
 })
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
@@ -37,7 +37,7 @@ export function AppearanceForm() {
 
   const defaultValues: Partial<AppearanceFormValues> = {
     theme: theme as 'light' | 'dark',
-    font
+    font,
   }
 
   const form = useForm<AppearanceFormValues>({

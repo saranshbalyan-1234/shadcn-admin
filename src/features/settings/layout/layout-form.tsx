@@ -85,7 +85,7 @@ export function LayoutForm() {
         <div className='space-y-8'>
           {/* Sidebar Settings */}
           <div>
-        <h3 className='text-base font-medium'>Sidebar Options</h3>
+            <h3 className='text-base font-medium'>Sidebar Options</h3>
           </div>
 
           {/* Sidebar Position */}
@@ -95,7 +95,10 @@ export function LayoutForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Sidebar Position</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='Select sidebar position' />
@@ -117,7 +120,10 @@ export function LayoutForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Sidebar Style</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='Select sidebar style' />
@@ -140,7 +146,10 @@ export function LayoutForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Collapse Behavior</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='Select collapse behavior' />
@@ -169,7 +178,10 @@ export function LayoutForm() {
                   </FormDescription>
                 </div>
                 <FormControl>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -191,7 +203,10 @@ export function LayoutForm() {
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -209,7 +224,10 @@ export function LayoutForm() {
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -221,13 +239,18 @@ export function LayoutForm() {
               render={({ field }) => (
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Show Theme Switch</FormLabel>
+                    <FormLabel className='text-base'>
+                      Show Theme Switch
+                    </FormLabel>
                     <FormDescription>
                       Display the theme switcher in the header
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -239,13 +262,18 @@ export function LayoutForm() {
               render={({ field }) => (
                 <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
                   <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Show Profile Menu</FormLabel>
+                    <FormLabel className='text-base'>
+                      Show Profile Menu
+                    </FormLabel>
                     <FormDescription>
                       Display the profile menu in the header
                     </FormDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                 </FormItem>
               )}

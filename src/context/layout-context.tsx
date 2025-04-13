@@ -31,9 +31,9 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
           showSearch: layoutData.headerOptions.showSearch,
           showThemeSwitch: layoutData.headerOptions.showThemeSwitch,
           showProfileMenu: layoutData.headerOptions.showProfileMenu,
-        }
+        },
       }
-      
+
       // Update both the config object and state
       Object.assign(layoutConfig, newConfig)
       setLayout(newConfig)
@@ -46,7 +46,9 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   return (
-    <LayoutContext.Provider value={{ reloadLayout: loadLayoutFromStorage, layout }}>
+    <LayoutContext.Provider
+      value={{ reloadLayout: loadLayoutFromStorage, layout }}
+    >
       {children}
     </LayoutContext.Provider>
   )
