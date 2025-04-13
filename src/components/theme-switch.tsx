@@ -292,8 +292,15 @@ function Customizer() {
     setThemeType(config.theme === 'custom' ? 'custom' : 'predefined')
   }, [config.theme])
 
-  const handleThemeVarChange = (targetMode: 'light' | 'dark', key: string, value: string) => {
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  const handleThemeVarChange = (
+    targetMode: 'light' | 'dark',
+    key: string,
+    value: string
+  ) => {
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+      .matches
+      ? 'dark'
+      : 'light'
     const effectiveMode = mode === 'system' ? systemTheme : mode
 
     // Update config to custom theme
@@ -314,16 +321,18 @@ function Customizer() {
           },
         },
       }
-      
+
       // Save to localStorage
       localStorage.setItem('custom-theme', JSON.stringify(updated))
 
       // Apply variables if we're modifying the current mode
       if (targetMode === effectiveMode) {
         const root = document.documentElement
-        Object.entries(updated.cssVars[targetMode]).forEach(([cssKey, cssValue]) => {
-          root.style.setProperty(`--${cssKey}`, cssValue as string)
-        })
+        Object.entries(updated.cssVars[targetMode]).forEach(
+          ([cssKey, cssValue]) => {
+            root.style.setProperty(`--${cssKey}`, cssValue as string)
+          }
+        )
       }
 
       return updated

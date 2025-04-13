@@ -1,9 +1,9 @@
-import { useAtom } from "jotai"
-import { atomWithStorage } from "jotai/utils"
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
-const configAtom = atomWithStorage("config", {
-  style: "default",
-  theme: "zinc",
+const configAtom = atomWithStorage('config', {
+  style: 'default',
+  theme: 'zinc',
   radius: 0.5,
 })
 
