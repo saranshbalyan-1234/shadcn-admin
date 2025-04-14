@@ -171,7 +171,7 @@ const Sidebar = React.forwardRef<
     {
       side = 'left',
       variant = 'sidebar',
-      collapsible = 'offcanvas',
+      collapsible = 'icon',
       className,
       children,
       ...props
@@ -180,20 +180,20 @@ const Sidebar = React.forwardRef<
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
-    if (collapsible === 'none') {
-      return (
-        <div
-          className={cn(
-            'flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground',
-            className
-          )}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </div>
-      )
-    }
+    // if (collapsible === 'none') {
+    //   return (
+    //     <div
+    //       className={cn(
+    //         'flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground',
+    //         className
+    //       )}
+    //       ref={ref}
+    //       {...props}
+    //     >
+    //       {children}
+    //     </div>
+    //   )
+    // }
 
     if (isMobile) {
       return (
@@ -225,8 +225,8 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         className='group peer hidden text-sidebar-foreground md:block'
-        data-state={state}
-        data-collapsible={state === 'collapsed' ? collapsible : ''}
+        data-state={collapsible == 'none' ?'expanded':state}
+        data-collapsible={collapsible !=='none'? state === 'collapsed' ? collapsible : '':''}
         data-variant={variant}
         data-side={side}
       >
