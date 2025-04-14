@@ -1,13 +1,12 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
-import { useLayout } from '@/context/layout-context';
-import { Separator } from '@/components/ui/separator';
+import React from 'react'
+import { cn } from '@/lib/utils'
+import { useLayout } from '@/context/layout-context'
+import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
-import { Breadcrumbs } from '@/components/breadcrumbs';
-import { ProfileDropdown } from '@/components/profile-dropdown';
-import { Search } from '@/components/search';
-import { ThemeSwitch } from '@/components/theme-switch';
-
+import { Breadcrumbs } from '@/components/breadcrumbs'
+import { ProfileDropdown } from '@/components/profile-dropdown'
+import { Search } from '@/components/search'
+import { ThemeSwitch } from '@/components/theme-switch'
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   fixed?: boolean
@@ -24,9 +23,8 @@ export const Header = ({
   const { layout } = useLayout()
   const { isMobile } = useSidebar()
   const { showSearch, showThemeSwitch, showProfileMenu, sticky } = layout.header
-  console.log("saransh",layout)
+  console.log('saransh', layout)
   const { showBreadcrumbs, collapsible } = layout.sidebar
-
 
   return (
     <header
@@ -38,9 +36,17 @@ export const Header = ({
       )}
       {...props}
     >
-      {collapsible !== 'none' || isMobile ?<><SidebarTrigger variant='outline' className='scale-125 sm:scale-100' />
-        <Separator orientation='vertical' className='h-6' />
-      </>:<></>}
+      {collapsible !== 'none' || isMobile ? (
+        <>
+          <SidebarTrigger
+            variant='outline'
+            className='scale-125 sm:scale-100'
+          />
+          <Separator orientation='vertical' className='h-6' />
+        </>
+      ) : (
+        <></>
+      )}
 
       {/* Left section with breadcrumbs */}
       {showBreadcrumbs && (

@@ -61,9 +61,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   )
 
   return (
-    <LayoutContext.Provider value={value}>
-      {children}
-    </LayoutContext.Provider>
+    <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>
   )
 }
 
