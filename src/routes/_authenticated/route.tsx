@@ -21,7 +21,7 @@ function RouteComponent() {
           id='content'
           className={cn(
             'w-full max-w-full',
-            'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
+            'peer-data-[state=collapsed]:w-100]',
             'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
             'peer-data-[side=left]:ml-auto peer-data-[side=right]:mr-auto',
             'transition-[width,margin] duration-200 ease-linear',
