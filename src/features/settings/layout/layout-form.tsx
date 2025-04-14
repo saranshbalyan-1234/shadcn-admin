@@ -1,6 +1,17 @@
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form    // Save to localStorage and reload layout immediately
+    localStorage.setItem('layout-config', JSON.stringify(data))
+    
+    // Force an immediate reload to update the layout
+    reloadLayout()
+    
+    // Small delay before showing success message
+    setTimeout(() => {
+      toast({
+        title: 'Layout updated',
+        description: 'Your layout settings have been updated.',
+      })
+    }, 100) { zodResolver } from '@hookform/resolvers/zod'
 import { layoutConfig } from '@/config/layout'
 import { useLayout } from '@/context/layout-context'
 import { toast } from '@/hooks/use-toast'
@@ -38,18 +49,18 @@ const layoutFormSchema = z.object({
 type LayoutFormValues = z.infer<typeof layoutFormSchema>
 
 export function LayoutForm() {
-  const { reloadLayout } = useLayout()
+  const { reloadLayout, layout } = useLayout()
 
   const defaultValues: LayoutFormValues = {
-    sidebarPosition: layoutConfig.sidebar.side,
-    sidebarVariant: layoutConfig.sidebar.variant,
-    sidebarCollapsible: layoutConfig.sidebar.collapsible,
-    showBreadcrumbs: layoutConfig.sidebar.showBreadcrumbs,
+    sidebarPosition: layout.sidebar.side,
+    sidebarVariant: layout.sidebar.variant,
+    sidebarCollapsible: layout.sidebar.collapsible,
+    showBreadcrumbs: layout.sidebar.showBreadcrumbs,
     headerOptions: {
-      sticky: layoutConfig.header.sticky,
-      showSearch: layoutConfig.header.showSearch,
-      showThemeSwitch: layoutConfig.header.showThemeSwitch,
-      showProfileMenu: layoutConfig.header.showProfileMenu,
+      sticky: layout.header.sticky,
+      showSearch: layout.header.showSearch,
+      showThemeSwitch: layout.header.showThemeSwitch,
+      showProfileMenu: layout.header.showProfileMenu,
     },
   }
 
@@ -59,15 +70,8 @@ export function LayoutForm() {
   })
 
   function onSubmit(data: LayoutFormValues) {
-    // Update layout config
-    layoutConfig.sidebar.side = data.sidebarPosition
-    layoutConfig.sidebar.variant = data.sidebarVariant
-    layoutConfig.sidebar.collapsible = data.sidebarCollapsible
-    layoutConfig.sidebar.showBreadcrumbs = data.showBreadcrumbs
-    layoutConfig.header.sticky = data.headerOptions.sticky
-    layoutConfig.header.showSearch = data.headerOptions.showSearch
-    layoutConfig.header.showThemeSwitch = data.headerOptions.showThemeSwitch
-    layoutConfig.header.showProfileMenu = data.headerOptions.showProfileMenu
+    // Save to localStorage first
+    localStorage.setItem('layout-config', JSON.stringify(data))
 
     // Save to localStorage and reload layout
     localStorage.setItem('layout-config', JSON.stringify(data))

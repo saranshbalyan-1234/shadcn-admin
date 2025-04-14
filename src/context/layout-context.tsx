@@ -15,7 +15,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
     const savedLayout = localStorage.getItem('layout-config')
     if (savedLayout) {
       const layoutData = JSON.parse(savedLayout)
-      // Update layout config with saved values
+      // Create new config with saved values
       const newConfig = {
         ...layoutConfig,
         sidebar: {
@@ -34,8 +34,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
         },
       }
 
-      // Update both the config object and state
-      Object.assign(layoutConfig, newConfig)
+      // Update state which will cause re-renders
       setLayout(newConfig)
     }
   }
@@ -45,10 +44,24 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
     loadLayoutFromStorage()
   }, [])
 
+  // Force re-render when layout changes
+  useEffect(() => {
+    const savedLayout = localStorage.getItem('layout-config')
+    if (savedLayout) {
+      loadLayoutFromStorage()
+    }
+  }, [])
+
+  const value = React.useMemo(
+    () => ({
+      reloadLayout: loadLayoutFromStorage,
+      layout,
+    }),
+    [layout]
+  )
+
   return (
-    <LayoutContext.Provider
-      value={{ reloadLayout: loadLayoutFromStorage, layout }}
-    >
+    <LayoutContext.Provider value={value}>
       {children}
     </LayoutContext.Provider>
   )

@@ -22,6 +22,7 @@ export const Header = ({
   const [offset, setOffset] = React.useState(0)
   const { layout } = useLayout()
   const { showSearch, showThemeSwitch, showProfileMenu, sticky } = layout.header
+  console.log("saransh",layout)
   const { showBreadcrumbs } = layout.sidebar
 
   // Use the sticky prop from layout context if fixed prop is not provided
