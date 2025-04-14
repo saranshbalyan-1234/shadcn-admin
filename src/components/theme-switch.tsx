@@ -522,8 +522,9 @@ function Customizer() {
                 <div>
                   <Label className='text-l font-bold'>Light Mode Colors</Label>
                   <div className='mt-4'>
-                    {Object.entries(customTheme.cssVars.light).map(
-                      ([key, value]) => (
+                    {Object.entries(customTheme.cssVars.light)
+                      .filter(([key]) => key !== 'radius')
+                      .map(([key, value]) => (
                         <ColorPicker
                           key={key}
                           label={key
@@ -534,15 +535,15 @@ function Customizer() {
                             handleThemeVarChange('light', key, newValue)
                           }
                         />
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
                 <div>
                   <Label className='text-l font-bold'>Dark Mode Colors</Label>
                   <div className='mt-4'>
-                    {Object.entries(customTheme.cssVars.dark).map(
-                      ([key, value]) => (
+                    {Object.entries(customTheme.cssVars.dark)
+                      .filter(([key]) => key !== 'radius')
+                      .map(([key, value]) => (
                         <ColorPicker
                           key={key}
                           label={key
@@ -553,8 +554,7 @@ function Customizer() {
                             handleThemeVarChange('dark', key, newValue)
                           }
                         />
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
               </div>
