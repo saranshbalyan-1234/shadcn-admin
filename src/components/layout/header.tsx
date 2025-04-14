@@ -19,29 +19,19 @@ export const Header = ({
   children,
   ...props
 }: HeaderProps) => {
-  const [offset, setOffset] = React.useState(0)
+  // const [offset, setOffset] = React.useState(0)
   const { layout } = useLayout()
   const { showSearch, showThemeSwitch, showProfileMenu, sticky } = layout.header
   console.log("saransh",layout)
   const { showBreadcrumbs } = layout.sidebar
 
-  // Use the sticky prop from layout context if fixed prop is not provided
-  const isFixed = fixed ?? sticky
-
-  React.useEffect(() => {
-    const onScroll = () => {
-      setOffset(document.body.scrollTop || document.documentElement.scrollTop)
-    }
-    document.addEventListener('scroll', onScroll, { passive: true })
-    return () => document.removeEventListener('scroll', onScroll)
-  }, [])
 
   return (
     <header
       className={cn(
-        'flex h-16 items-center gap-3 bg-background p-4 sm:gap-4',
-        isFixed && 'header-fixed peer/header fixed z-50 w-[inherit] rounded-md',
-        offset > 10 && isFixed ? 'shadow' : 'shadow-none',
+        'flex h-16 items-center gap-3 bg-sidebar p-4 sm:gap-4',
+        sticky && 'header-fixed peer/header fixed z-50 w-[inherit]',
+        'border-b border-sidebar-border',
         className
       )}
       {...props}
