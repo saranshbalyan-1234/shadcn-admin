@@ -1,17 +1,6 @@
 import { z } from 'zod'
-import { useForm } from 'react-hook-form    // Save to localStorage and reload layout immediately
-    localStorage.setItem('layout-config', JSON.stringify(data))
-    
-    // Force an immediate reload to update the layout
-    reloadLayout()
-    
-    // Small delay before showing success message
-    setTimeout(() => {
-      toast({
-        title: 'Layout updated',
-        description: 'Your layout settings have been updated.',
-      })
-    }, 100) { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { layoutConfig } from '@/config/layout'
 import { useLayout } from '@/context/layout-context'
 import { toast } from '@/hooks/use-toast'
@@ -60,7 +49,7 @@ export function LayoutForm() {
       sticky: layout.header.sticky,
       showSearch: layout.header.showSearch,
       showThemeSwitch: layout.header.showThemeSwitch,
-      showProfileMenu: layout.header.showProfileMenu,
+      showProfileMenu: layoutConfig.header.showProfileMenu,
     },
   }
 
@@ -70,8 +59,15 @@ export function LayoutForm() {
   })
 
   function onSubmit(data: LayoutFormValues) {
-    // Save to localStorage first
-    localStorage.setItem('layout-config', JSON.stringify(data))
+    // Update layout config
+    layoutConfig.sidebar.side = data.sidebarPosition
+    layoutConfig.sidebar.variant = data.sidebarVariant
+    layoutConfig.sidebar.collapsible = data.sidebarCollapsible
+    layoutConfig.sidebar.showBreadcrumbs = data.showBreadcrumbs
+    layoutConfig.header.sticky = data.headerOptions.sticky
+    layoutConfig.header.showSearch = data.headerOptions.showSearch
+    layoutConfig.header.showThemeSwitch = data.headerOptions.showThemeSwitch
+    layoutConfig.header.showProfileMenu = data.headerOptions.showProfileMenu
 
     // Save to localStorage and reload layout
     localStorage.setItem('layout-config', JSON.stringify(data))
