@@ -50,8 +50,9 @@ export const Header = ({
 
       {/* Left section with breadcrumbs */}
       {showBreadcrumbs && (
-        <div className='hidden md:block'>
+        <div className='flex'>
           <Breadcrumbs />
+          <Separator orientation='vertical' className='h-6 ml-4' />
         </div>
       )}
 
