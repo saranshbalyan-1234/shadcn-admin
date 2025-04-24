@@ -4,6 +4,7 @@ import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { fonts } from '@/config/fonts'
 import { cn } from '@/lib/utils'
+import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 import { showSubmittedData } from '@/utils/show-submitted-data'
 import { useFont } from '@/context/font-context'
 import { useTheme } from '@/context/theme-context'
@@ -18,6 +19,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Input } from '@/components/ui/input'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -27,6 +29,7 @@ const appearanceFormSchema = z.object({
     invalid_type_error: 'Select a font',
     required_error: 'Please select a font.',
   }),
+  primaryColor: z.string().min(1, 'Please select a primary color'),
 })
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
@@ -35,10 +38,10 @@ export function AppearanceForm() {
   const { font, setFont } = useFont()
   const { theme, setTheme } = useTheme()
 
-  // This can come from your database or API.
   const defaultValues: Partial<AppearanceFormValues> = {
     theme: theme as 'light' | 'dark',
     font,
+    primaryColor: '#7c3aed', // Default purple color
   }
 
   const form = useForm<AppearanceFormValues>({
@@ -47,10 +50,23 @@ export function AppearanceForm() {
   })
 
   function onSubmit(data: AppearanceFormValues) {
-    if (data.font != font) setFont(data.font)
-    if (data.theme != theme) setTheme(data.theme)
+    if (data.font !== font) setFont(data.font)
+    if (data.theme !== theme) setTheme(data.theme)
+    
+    // Generate and apply new theme colors
+    const themeColors = generateThemeColors(data.primaryColor)
+    applyThemeColors(theme === 'dark' ? themeColors.dark : themeColors.light)
 
     showSubmittedData(data)
+  }
+
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value
+    form.setValue('primaryColor', color)
+    
+    // Generate and apply theme colors immediately
+    const themeColors = generateThemeColors(color)
+    applyThemeColors(theme === 'dark' ? themeColors.dark : themeColors.light)
   }
 
   return (
@@ -87,6 +103,34 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name='primaryColor'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Primary Color</FormLabel>
+              <div className='flex gap-4 items-center'>
+                <FormControl>
+                  <Input
+                    type='color'
+                    className='w-16 h-10'
+                    {...field}
+                    onChange={handleColorChange}
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input {...field} placeholder='Color hex value' />
+                </FormControl>
+              </div>
+              <FormDescription>
+                Choose a primary color to generate the theme palette
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name='theme'
