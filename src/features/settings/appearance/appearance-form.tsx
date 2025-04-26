@@ -143,7 +143,7 @@ export function AppearanceForm() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className='grid max-w-md grid-cols-3 gap-4 pt-2'
+                className='flex w-full items-center justify-between space-x-2 flex-wrap'
               >
                 <FormItem>
                   <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
@@ -162,9 +162,6 @@ export function AppearanceForm() {
                         </div>
                       </div>
                     </div>
-                    <span className='block w-full p-2 text-center font-normal'>
-                      Light
-                    </span>
                   </FormLabel>
                 </FormItem>
 
@@ -185,9 +182,6 @@ export function AppearanceForm() {
                         </div>
                       </div>
                     </div>
-                    <span className='block w-full p-2 text-center font-normal'>
-                      Dark
-                    </span>
                   </FormLabel>
                 </FormItem>
 
@@ -208,9 +202,6 @@ export function AppearanceForm() {
                         </div>
                       </div>
                     </div>
-                    <span className='block w-full p-2 text-center font-normal'>
-                      System
-                    </span>
                   </FormLabel>
                 </FormItem>
               </RadioGroup>
