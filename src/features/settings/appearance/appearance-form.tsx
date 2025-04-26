@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const appearanceFormSchema = z.object({
@@ -29,18 +30,20 @@ const appearanceFormSchema = z.object({
     required_error: 'Please select a font.',
   }),
   primaryColor: z.string().min(1, 'Please select a primary color'),
+  radius: z.string().min(1, "Please select a radius value")
 })
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm() {
   const { font, setFont } = useFont()
-  const { theme, setTheme, primaryColor, setPrimaryColor } = useTheme()
+  const { theme, setTheme, primaryColor, setPrimaryColor, radius, setRadius } = useTheme()
 
   const defaultValues: Partial<AppearanceFormValues> = {
     theme,
     font,
     primaryColor,
+    radius: radius || '0.5' // Ensure we have a default value
   }
 
   const form = useForm<AppearanceFormValues>({
@@ -53,11 +56,13 @@ export function AppearanceForm() {
     if (data.font !== font) setFont(data.font)
     if (data.theme !== theme) setTheme(data.theme)
     if (data.primaryColor !== primaryColor) setPrimaryColor(data.primaryColor)
+    if (data.radius !== radius) setRadius(data.radius)
 
     // Save all preferences to localStorage
     localStorage.setItem('theme-mode', data.theme)
     localStorage.setItem('theme-color', data.primaryColor)
     localStorage.setItem('theme-font', data.font)
+    localStorage.setItem('theme-radius', data.radius)
 
     showSubmittedData(data)
   }
@@ -205,6 +210,50 @@ export function AppearanceForm() {
                   </FormLabel>
                 </FormItem>
               </RadioGroup>
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='radius'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Radius</FormLabel>
+              <FormDescription>
+                Adjust the border radius of the interface elements.
+              </FormDescription>
+              <FormMessage />
+              <div className="flex flex-col space-y-4">
+                <FormControl>
+                  <div className="grid gap-4 grid-cols-[1fr,80px]">
+                    <Slider
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      value={[parseFloat(field.value)]}
+                      onValueChange={(vals) => {
+                        field.onChange(vals[0].toString())
+                      }}
+                    />
+                    <Input
+                      type="number"
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      value={field.value ? parseFloat(field.value) : 0}
+                      onChange={(e) => {
+                        const value = Math.min(1, Math.max(0, e.target.valueAsNumber))
+                        field.onChange(value.toString())
+                      }}
+                    />
+                  </div>
+                </FormControl>
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Square (0)</span>
+                  <span>Full (1)</span>
+                </div>
+              </div>
             </FormItem>
           )}
         />

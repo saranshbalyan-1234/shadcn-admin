@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 
 type Theme = 'dark' | 'light' | 'system'
+type Radius = string
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -14,6 +15,8 @@ type ThemeContextType = {
   setTheme: (theme: Theme) => void
   primaryColor: string
   setPrimaryColor: (color: string) => void
+  radius: Radius
+  setRadius: (radius: Radius) => void
   getEffectiveTheme: () => 'light' | 'dark'
 }
 
@@ -32,6 +35,9 @@ export function ThemeProvider({
   const [primaryColor, setPrimaryColor] = useState<string>(
     () => localStorage.getItem('theme-color') || '#000000'
   )
+  const [radius, setRadius] = useState<Radius>(
+    () => (localStorage.getItem('theme-radius') as Radius) || '0.5'
+  )
 
   const getEffectiveTheme = () => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -46,9 +52,21 @@ export function ThemeProvider({
     const root = window.document.documentElement
     const effectiveTheme = getEffectiveTheme()
 
+    // Apply theme class
     root.classList.remove('light', 'dark')
     root.classList.add(effectiveTheme)
 
+    // Apply radius class
+    root.classList.forEach((className) => {
+      if (className.startsWith('radius-')) {
+        root.classList.remove(className)
+      }
+    })
+    // Convert slider value (0-1) to rem value (0-1rem)
+    const remValue = parseFloat(radius)
+    document.documentElement.style.setProperty('--radius', `${remValue}rem`)
+
+    // Apply colors
     const themeColors = generateThemeColors(primaryColor)
     applyThemeColors(
       effectiveTheme === 'dark' ? themeColors.dark : themeColors.light
@@ -57,7 +75,7 @@ export function ThemeProvider({
 
   useEffect(() => {
     applyThemeSettings()
-  }, [theme, primaryColor])
+  }, [theme, primaryColor, radius])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -69,16 +87,20 @@ export function ThemeProvider({
     }
 
     mediaQuery.addEventListener('change', handleSystemThemeChange)
-    return () =>
-      mediaQuery.removeEventListener('change', handleSystemThemeChange)
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange)
   }, [theme])
 
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme)
+    localStorage.setItem(storageKey, newTheme)
   }
 
   const handlePrimaryColorChange = (color: string) => {
     setPrimaryColor(color)
+  }
+
+  const handleRadiusChange = (newRadius: Radius) => {
+    setRadius(newRadius)
   }
 
   return (
@@ -88,6 +110,8 @@ export function ThemeProvider({
         setTheme: handleThemeChange,
         primaryColor,
         setPrimaryColor: handlePrimaryColorChange,
+        radius,
+        setRadius: handleRadiusChange,
         getEffectiveTheme,
       }}
     >
