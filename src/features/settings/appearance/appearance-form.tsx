@@ -236,23 +236,8 @@ export function AppearanceForm() {
                         field.onChange(vals[0].toString())
                       }}
                     />
-                    <Input
-                      type="number"
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      value={field.value ? parseFloat(field.value) : 0}
-                      onChange={(e) => {
-                        const value = Math.min(1, Math.max(0, e.target.valueAsNumber))
-                        field.onChange(value.toString())
-                      }}
-                    />
                   </div>
                 </FormControl>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Square (0)</span>
-                  <span>Full (1)</span>
-                </div>
               </div>
             </FormItem>
           )}
