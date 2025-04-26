@@ -69,6 +69,31 @@ export function AppearanceForm() {
     setPrimaryColor(color)
   }
 
+  const handleCancel = () => {
+    // Read values from localStorage with type checking
+    const storedTheme = (localStorage.getItem('theme-mode') as Theme) || 'system'
+    const storedFont = localStorage.getItem('theme-font') || 'inter'
+    const storedColor = localStorage.getItem('theme-color') || '#000000'
+    const storedRadius = localStorage.getItem('theme-radius') || '0.5'
+
+    // Validate font is one of the allowed values
+    const validFont = fonts.includes(storedFont as any) ? storedFont : 'inter'
+
+    // Update form values
+    form.reset({
+      theme: storedTheme,
+      font: validFont as typeof fonts[number],
+      primaryColor: storedColor,
+      radius: storedRadius
+    })
+
+    // Apply values through context
+    setTheme(storedTheme)
+    setFont(validFont as typeof fonts[number])
+    setPrimaryColor(storedColor)
+    setRadius(storedRadius)
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
@@ -249,7 +274,16 @@ export function AppearanceForm() {
           )}
         />
 
-        <Button type='submit'>Update preferences</Button>
+        <div className="flex space-x-4">
+          <Button type='submit'>Update preferences</Button>
+          <Button 
+            type='button' 
+            variant='outline' 
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
     </Form>
   )
