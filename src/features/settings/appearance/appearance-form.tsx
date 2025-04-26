@@ -4,7 +4,6 @@ import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { fonts } from '@/config/fonts'
 import { cn } from '@/lib/utils'
-import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 import { showSubmittedData } from '@/utils/show-submitted-data'
 import { useFont } from '@/context/font-context'
 import { useTheme } from '@/context/theme-context'
@@ -18,11 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(['light', 'dark'], {
+  theme: z.enum(['light', 'dark', 'system'], {
     required_error: 'Please select a theme.',
   }),
   font: z.enum(fonts, {
@@ -36,12 +35,12 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm() {
   const { font, setFont } = useFont()
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, primaryColor, setPrimaryColor } = useTheme()
 
   const defaultValues: Partial<AppearanceFormValues> = {
-    theme: theme as 'light' | 'dark',
+    theme,
     font,
-    primaryColor: '#7c3aed', // Default purple color
+    primaryColor,
   }
 
   const form = useForm<AppearanceFormValues>({
@@ -50,12 +49,15 @@ export function AppearanceForm() {
   })
 
   function onSubmit(data: AppearanceFormValues) {
+    // Update state
     if (data.font !== font) setFont(data.font)
     if (data.theme !== theme) setTheme(data.theme)
-    
-    // Generate and apply new theme colors
-    const themeColors = generateThemeColors(data.primaryColor)
-    applyThemeColors(theme === 'dark' ? themeColors.dark : themeColors.light)
+    if (data.primaryColor !== primaryColor) setPrimaryColor(data.primaryColor)
+
+    // Save all preferences to localStorage
+    localStorage.setItem('theme-mode', data.theme)
+    localStorage.setItem('theme-color', data.primaryColor)
+    localStorage.setItem('theme-font', data.font)
 
     showSubmittedData(data)
   }
@@ -63,10 +65,7 @@ export function AppearanceForm() {
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value
     form.setValue('primaryColor', color)
-    
-    // Generate and apply theme colors immediately
-    const themeColors = generateThemeColors(color)
-    applyThemeColors(theme === 'dark' ? themeColors.dark : themeColors.light)
+    setPrimaryColor(color)
   }
 
   return (
@@ -110,11 +109,11 @@ export function AppearanceForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Primary Color</FormLabel>
-              <div className='flex gap-4 items-center'>
+              <div className='flex items-center gap-4'>
                 <FormControl>
                   <Input
                     type='color'
-                    className='w-16 h-10'
+                    className='h-10 w-16'
                     {...field}
                     onChange={handleColorChange}
                   />
@@ -144,7 +143,7 @@ export function AppearanceForm() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className='grid max-w-md grid-cols-2 gap-8 pt-2'
+                className='grid max-w-md grid-cols-3 gap-4 pt-2'
               >
                 <FormItem>
                   <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
@@ -161,10 +160,6 @@ export function AppearanceForm() {
                           <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
                           <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
                         </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs'>
-                          <div className='h-4 w-4 rounded-full bg-[#ecedef]' />
-                          <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
-                        </div>
                       </div>
                     </div>
                     <span className='block w-full p-2 text-center font-normal'>
@@ -172,6 +167,7 @@ export function AppearanceForm() {
                     </span>
                   </FormLabel>
                 </FormItem>
+
                 <FormItem>
                   <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
                     <FormControl>
@@ -187,14 +183,33 @@ export function AppearanceForm() {
                           <div className='h-4 w-4 rounded-full bg-slate-400' />
                           <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
                         </div>
-                        <div className='flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs'>
+                      </div>
+                    </div>
+                    <span className='block w-full p-2 text-center font-normal'>
+                      Dark
+                    </span>
+                  </FormLabel>
+                </FormItem>
+
+                <FormItem>
+                  <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
+                    <FormControl>
+                      <RadioGroupItem value='system' className='sr-only' />
+                    </FormControl>
+                    <div className='border-muted hover:border-accent items-center rounded-md border-2 p-1'>
+                      <div className='space-y-2 rounded-sm bg-gradient-to-b from-[#ecedef] to-slate-950 p-2'>
+                        <div className='space-y-2 rounded-md bg-white/80 p-2 shadow-xs'>
+                          <div className='h-2 w-[80px] rounded-lg bg-[#ecedef]' />
+                          <div className='h-2 w-[100px] rounded-lg bg-[#ecedef]' />
+                        </div>
+                        <div className='flex items-center space-x-2 rounded-md bg-slate-800/80 p-2 shadow-xs'>
                           <div className='h-4 w-4 rounded-full bg-slate-400' />
                           <div className='h-2 w-[100px] rounded-lg bg-slate-400' />
                         </div>
                       </div>
                     </div>
                     <span className='block w-full p-2 text-center font-normal'>
-                      Dark
+                      System
                     </span>
                   </FormLabel>
                 </FormItem>

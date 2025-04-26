@@ -19,6 +19,14 @@ export function ThemeSwitch() {
     const themeColor = theme === 'dark' ? '#020817' : '#fff'
     const metaThemeColor = document.querySelector("meta[name='theme-color']")
     if (metaThemeColor) metaThemeColor.setAttribute('content', themeColor)
+
+    // Sync the dark class with the current theme state
+    const root = window.document.documentElement
+    const isDark =
+      theme === 'dark' ||
+      (theme === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    root.classList.toggle('dark', isDark)
   }, [theme])
 
   return (

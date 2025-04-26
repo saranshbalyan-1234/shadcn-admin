@@ -26,7 +26,11 @@ function oklchToString(l: number, c: number, h: number): string {
   return `oklch(${l} ${c} ${h})`
 }
 
-function createThemeColors(lightness: number, chroma: number, hue: number): { light: ThemeColors; dark: ThemeColors } {
+function createThemeColors(
+  lightness: number,
+  chroma: number,
+  hue: number
+): { light: ThemeColors; dark: ThemeColors } {
   // Light theme generation
   const light: ThemeColors = {
     background: oklchToString(1, 0, 0), // White
@@ -76,14 +80,17 @@ function createThemeColors(lightness: number, chroma: number, hue: number): { li
   return { light, dark }
 }
 
-export function generateThemeColors(baseColor: string): { light: ThemeColors; dark: ThemeColors } {
+export function generateThemeColors(baseColor: string): {
+  light: ThemeColors
+  dark: ThemeColors
+} {
   try {
     // Parse the input color and convert to OKLCH
     const color = parse(baseColor)
     if (!color) {
       throw new Error('Invalid color format')
     }
-    
+
     const oklchColor = oklch(color)
     if (!oklchColor) {
       throw new Error('Color conversion failed')

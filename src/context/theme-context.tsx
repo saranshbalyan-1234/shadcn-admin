@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -8,75 +9,99 @@ type ThemeProviderProps = {
   storageKey?: string
 }
 
-type ThemeProviderState = {
+type ThemeContextType = {
   theme: Theme
   setTheme: (theme: Theme) => void
+  primaryColor: string
+  setPrimaryColor: (color: string) => void
+  getEffectiveTheme: () => 'light' | 'dark'
 }
 
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-}
+const ThemeContext = createContext<ThemeContextType | null>(null)
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+ThemeContext.displayName = 'ThemeContext'
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
-  ...props
+  storageKey = 'theme-mode',
 }: ThemeProviderProps) {
-  const [theme, _setTheme] = useState<Theme>(
+  const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
+  const [primaryColor, setPrimaryColor] = useState<string>(
+    () => localStorage.getItem('theme-color') || '#000000'
+  )
+
+  const getEffectiveTheme = () => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    return theme === 'system'
+      ? mediaQuery.matches
+        ? 'dark'
+        : 'light'
+      : (theme as 'light' | 'dark')
+  }
+
+  const applyThemeSettings = () => {
+    const root = window.document.documentElement
+    const effectiveTheme = getEffectiveTheme()
+
+    root.classList.remove('light', 'dark')
+    root.classList.add(effectiveTheme)
+
+    const themeColors = generateThemeColors(primaryColor)
+    applyThemeColors(
+      effectiveTheme === 'dark' ? themeColors.dark : themeColors.light
+    )
+  }
 
   useEffect(() => {
-    const root = window.document.documentElement
+    applyThemeSettings()
+  }, [theme, primaryColor])
+
+  useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
-    const applyTheme = (theme: Theme) => {
-      root.classList.remove('light', 'dark') // Remove existing theme classes
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light'
-      const effectiveTheme = theme === 'system' ? systemTheme : theme
-      root.classList.add(effectiveTheme) // Add the new theme class
-    }
-
-    const handleChange = () => {
+    function handleSystemThemeChange() {
       if (theme === 'system') {
-        applyTheme('system')
+        applyThemeSettings()
       }
     }
 
-    applyTheme(theme)
-
-    mediaQuery.addEventListener('change', handleChange)
-
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    mediaQuery.addEventListener('change', handleSystemThemeChange)
+    return () =>
+      mediaQuery.removeEventListener('change', handleSystemThemeChange)
   }, [theme])
 
-  const setTheme = (theme: Theme) => {
-    localStorage.setItem(storageKey, theme)
-    _setTheme(theme)
+  const handleThemeChange = (newTheme: Theme) => {
+    setTheme(newTheme)
   }
 
-  const value = {
-    theme,
-    setTheme,
+  const handlePrimaryColorChange = (color: string) => {
+    setPrimaryColor(color)
   }
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme: handleThemeChange,
+        primaryColor,
+        setPrimaryColor: handlePrimaryColorChange,
+        getEffectiveTheme,
+      }}
+    >
       {children}
-    </ThemeProviderContext.Provider>
+    </ThemeContext.Provider>
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext)
+export function useTheme(): ThemeContextType {
+  const context = useContext(ThemeContext)
 
-  if (context === undefined)
+  if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider')
+  }
 
   return context
 }

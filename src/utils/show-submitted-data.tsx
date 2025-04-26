@@ -12,6 +12,6 @@ export function showSubmittedData(
       </pre>
     ),
     closeButton: true,
-    duration:2000
+    duration: 2000,
   })
 }
