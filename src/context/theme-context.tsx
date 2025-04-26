@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 
-type Theme = 'dark' | 'light' | 'system'
-type Radius = string
+export type Theme = 'dark' | 'light' | 'system'
+export type Radius = string
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -21,8 +21,6 @@ type ThemeContextType = {
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null)
-
-ThemeContext.displayName = 'ThemeContext'
 
 export function ThemeProvider({
   children,
@@ -56,13 +54,7 @@ export function ThemeProvider({
     root.classList.remove('light', 'dark')
     root.classList.add(effectiveTheme)
 
-    // Apply radius class
-    root.classList.forEach((className) => {
-      if (className.startsWith('radius-')) {
-        root.classList.remove(className)
-      }
-    })
-    // Convert slider value (0-1) to rem value (0-1rem)
+    // Apply radius
     const remValue = parseFloat(radius)
     document.documentElement.style.setProperty('--radius', `${remValue}rem`)
 
@@ -73,59 +65,53 @@ export function ThemeProvider({
     )
   }
 
+  // Apply theme settings whenever any theme-related value changes
   useEffect(() => {
     applyThemeSettings()
   }, [theme, primaryColor, radius])
 
+  // Listen for system theme changes
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-
-    function handleSystemThemeChange() {
+    const handleChange = () => {
       if (theme === 'system') {
         applyThemeSettings()
       }
     }
-
-    mediaQuery.addEventListener('change', handleSystemThemeChange)
-    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange)
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [theme])
 
-  const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme)
-    localStorage.setItem(storageKey, newTheme)
-  }
-
-  const handlePrimaryColorChange = (color: string) => {
-    setPrimaryColor(color)
-  }
-
-  const handleRadiusChange = (newRadius: Radius) => {
-    setRadius(newRadius)
+  const contextValue: ThemeContextType = {
+    theme,
+    setTheme: (newTheme: Theme) => {
+      setTheme(newTheme)
+      // Theme changes will be applied by the useEffect
+    },
+    primaryColor,
+    setPrimaryColor: (color: string) => {
+      setPrimaryColor(color)
+      // Color changes will be applied by the useEffect
+    },
+    radius,
+    setRadius: (value: Radius) => {
+      setRadius(value)
+      // Radius changes will be applied by the useEffect
+    },
+    getEffectiveTheme,
   }
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        setTheme: handleThemeChange,
-        primaryColor,
-        setPrimaryColor: handlePrimaryColorChange,
-        radius,
-        setRadius: handleRadiusChange,
-        getEffectiveTheme,
-      }}
-    >
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   )
 }
 
-export function useTheme(): ThemeContextType {
+export function useTheme() {
   const context = useContext(ThemeContext)
-
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
-
   return context
 }

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { showSubmittedData } from '@/utils/show-submitted-data'
 import { useFont } from '@/context/font-context'
 import { useTheme } from '@/context/theme-context'
+import type { Theme } from '@/context/theme-context'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Form,
@@ -52,12 +53,6 @@ export function AppearanceForm() {
   })
 
   function onSubmit(data: AppearanceFormValues) {
-    // Update state
-    if (data.font !== font) setFont(data.font)
-    if (data.theme !== theme) setTheme(data.theme)
-    if (data.primaryColor !== primaryColor) setPrimaryColor(data.primaryColor)
-    if (data.radius !== radius) setRadius(data.radius)
-
     // Save all preferences to localStorage
     localStorage.setItem('theme-mode', data.theme)
     localStorage.setItem('theme-color', data.primaryColor)
@@ -90,6 +85,11 @@ export function AppearanceForm() {
                       'w-[200px] appearance-none font-normal capitalize'
                     )}
                     {...field}
+                    onChange={(e) => {
+                      const value = e.target.value as typeof field.value
+                      field.onChange(value)
+                      setFont(value)
+                    }}
                   >
                     {fonts.map((font) => (
                       <option key={font} value={font}>
@@ -146,8 +146,11 @@ export function AppearanceForm() {
               </FormDescription>
               <FormMessage />
               <RadioGroup
-                onValueChange={field.onChange}
-                defaultValue={field.value}
+                onValueChange={(value) => {
+                  field.onChange(value)
+                  setTheme(value as Theme)
+                }}
+                value={field.value}
                 className='flex w-full items-center justify-between space-x-2 flex-wrap'
               >
                 <FormItem>
@@ -233,7 +236,9 @@ export function AppearanceForm() {
                       step={0.01}
                       value={[parseFloat(field.value)]}
                       onValueChange={(vals) => {
-                        field.onChange(vals[0].toString())
+                        const value = vals[0].toString()
+                        field.onChange(value)
+                        setRadius(value)
                       }}
                     />
                   </div>
