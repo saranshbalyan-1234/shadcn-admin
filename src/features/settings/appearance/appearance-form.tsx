@@ -71,7 +71,8 @@ export function AppearanceForm() {
 
   const handleCancel = () => {
     // Read values from localStorage with type checking
-    const storedTheme = (localStorage.getItem('theme-mode') as Theme) || 'system'
+    const storedTheme =
+      (localStorage.getItem('theme-mode') as Theme) || 'system'
     const storedFont = localStorage.getItem('theme-font') || 'inter'
     const storedColor = localStorage.getItem('theme-color') || '#000000'
     const storedRadius = localStorage.getItem('theme-radius') || '0.5'
@@ -82,14 +83,14 @@ export function AppearanceForm() {
     // Update form values
     form.reset({
       theme: storedTheme,
-      font: validFont as typeof fonts[number],
+      font: validFont as (typeof fonts)[number],
       primaryColor: storedColor,
-      radius: storedRadius
+      radius: storedRadius,
     })
 
     // Apply values through context
     setTheme(storedTheme)
-    setFont(validFont as typeof fonts[number])
+    setFont(validFont as (typeof fonts)[number])
     setPrimaryColor(storedColor)
     setRadius(storedRadius)
   }
@@ -274,13 +275,9 @@ export function AppearanceForm() {
           )}
         />
 
-        <div className="flex space-x-4">
+        <div className='flex space-x-4'>
           <Button type='submit'>Update preferences</Button>
-          <Button 
-            type='button' 
-            variant='outline' 
-            onClick={handleCancel}
-          >
+          <Button type='button' variant='outline' onClick={handleCancel}>
             Cancel
           </Button>
         </div>
