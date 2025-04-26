@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import { IconCheck, IconMoon, IconSun } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/context/theme-context'
+import type { Theme } from '@/context/theme-context'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -15,19 +16,24 @@ export function ThemeSwitch() {
 
   /* Update theme-color meta tag
    * when theme is updated */
-  useEffect(() => {
-    const themeColor = theme === 'dark' ? '#020817' : '#fff'
-    const metaThemeColor = document.querySelector("meta[name='theme-color']")
-    if (metaThemeColor) metaThemeColor.setAttribute('content', themeColor)
+  // useEffect(() => {
+  //   const themeColor = theme === 'dark' ? '#020817' : '#fff'
+  //   const metaThemeColor = document.querySelector("meta[name='theme-color']")
+  //   if (metaThemeColor) metaThemeColor.setAttribute('content', themeColor)
 
-    // Sync the dark class with the current theme state
-    const root = window.document.documentElement
-    const isDark =
-      theme === 'dark' ||
-      (theme === 'system' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    root.classList.toggle('dark', isDark)
-  }, [theme])
+  //   // Sync the dark class with the current theme state
+  //   const root = window.document.documentElement
+  //   const isDark =
+  //     theme === 'dark' ||
+  //     (theme === 'system' &&
+  //       window.matchMedia('(prefers-color-scheme: dark)').matches)
+  //   root.classList.toggle('dark', isDark)
+  // }, [theme])
+
+  const handleTheme = (theme: Theme) => {
+    setTheme(theme)
+    localStorage.setItem('theme-mode', theme)
+  }
 
   return (
     <DropdownMenu modal={false}>
@@ -39,21 +45,21 @@ export function ThemeSwitch() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
+        <DropdownMenuItem onClick={() => handleTheme('light')}>
           Light{' '}
           <IconCheck
             size={14}
             className={cn('ml-auto', theme !== 'light' && 'hidden')}
           />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
+        <DropdownMenuItem onClick={() => handleTheme('dark')}>
           Dark
           <IconCheck
             size={14}
             className={cn('ml-auto', theme !== 'dark' && 'hidden')}
           />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
+        <DropdownMenuItem onClick={() => handleTheme('system')}>
           System
           <IconCheck
             size={14}

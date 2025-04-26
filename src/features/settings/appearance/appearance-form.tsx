@@ -19,8 +19,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Slider } from '@/components/ui/slider'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Slider } from '@/components/ui/slider'
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark', 'system'], {
@@ -31,20 +31,21 @@ const appearanceFormSchema = z.object({
     required_error: 'Please select a font.',
   }),
   primaryColor: z.string().min(1, 'Please select a primary color'),
-  radius: z.string().min(1, "Please select a radius value")
+  radius: z.string().min(1, 'Please select a radius value'),
 })
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 
 export function AppearanceForm() {
   const { font, setFont } = useFont()
-  const { theme, setTheme, primaryColor, setPrimaryColor, radius, setRadius } = useTheme()
+  const { theme, setTheme, primaryColor, setPrimaryColor, radius, setRadius } =
+    useTheme()
 
   const defaultValues: Partial<AppearanceFormValues> = {
     theme,
     font,
     primaryColor,
-    radius: radius || '0.5' // Ensure we have a default value
+    radius: radius || '0.5', // Ensure we have a default value
   }
 
   const form = useForm<AppearanceFormValues>({
@@ -151,7 +152,7 @@ export function AppearanceForm() {
                   setTheme(value as Theme)
                 }}
                 value={field.value}
-                className='flex w-full items-center justify-between space-x-2 flex-wrap'
+                className='flex w-full flex-wrap items-center justify-between space-x-2'
               >
                 <FormItem>
                   <FormLabel className='[&:has([data-state=checked])>div]:border-primary'>
@@ -227,9 +228,9 @@ export function AppearanceForm() {
                 Adjust the border radius of the interface elements.
               </FormDescription>
               <FormMessage />
-              <div className="flex flex-col space-y-4">
+              <div className='flex flex-col space-y-4'>
                 <FormControl>
-                  <div className="grid gap-4 grid-cols-[1fr,80px]">
+                  <div className='grid grid-cols-[1fr,80px] gap-4'>
                     <Slider
                       min={0}
                       max={1}
