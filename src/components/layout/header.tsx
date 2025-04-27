@@ -44,7 +44,7 @@ export const Header = ({
       <SidebarTrigger variant='outline' className='scale-125 sm:scale-100' />
       <Separator orientation='vertical' className='h-6' />
       {children}
-      <div className='ml-auto'>
+      <div className='ml-auto flex items-center gap-2'>
         <Search />
         <ThemeSwitch />
         <ProfileDropdown />
