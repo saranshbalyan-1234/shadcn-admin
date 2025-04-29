@@ -1,11 +1,6 @@
 import React from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import {
-  IconArrowRightDashed,
-  IconDeviceLaptop,
-  IconMoon,
-  IconSun,
-} from '@tabler/icons-react'
+import { ArrowRight, Laptop, Moon, Sun } from 'lucide-react'
 import { useSearch } from '@/context/search-context'
 import { useTheme } from '@/context/theme-context'
 import {
@@ -52,7 +47,7 @@ export function CommandMenu() {
                       }}
                     >
                       <div className='mr-2 flex h-4 w-4 items-center justify-center'>
-                        <IconArrowRightDashed className='text-muted-foreground/80 size-2' />
+                        <ArrowRight className='text-muted-foreground/80 size-2' />
                       </div>
                       {navItem.title}
                     </CommandItem>
@@ -67,7 +62,7 @@ export function CommandMenu() {
                     }}
                   >
                     <div className='mr-2 flex h-4 w-4 items-center justify-center'>
-                      <IconArrowRightDashed className='text-muted-foreground/80 size-2' />
+                      <ArrowRight className='text-muted-foreground/80 size-2' />
                     </div>
                     {subItem.title}
                   </CommandItem>
@@ -78,14 +73,14 @@ export function CommandMenu() {
           <CommandSeparator />
           <CommandGroup heading='Theme'>
             <CommandItem onSelect={() => runCommand(() => setTheme('light'))}>
-              <IconSun /> <span>Light</span>
+              <Sun /> <span>Light</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('dark'))}>
-              <IconMoon className='scale-90' />
+              <Moon className='scale-90' />
               <span>Dark</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => setTheme('system'))}>
-              <IconDeviceLaptop />
+              <Laptop />
               <span>System</span>
             </CommandItem>
           </CommandGroup>

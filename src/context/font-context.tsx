@@ -14,7 +14,7 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [font, _setFont] = useState<Font>(() => {
-    const savedFont = localStorage.getItem('font')
+    const savedFont = localStorage.getItem('theme-font')
     return fonts.includes(savedFont as Font) ? (savedFont as Font) : fonts[0]
   })
 
@@ -31,11 +31,14 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [font])
 
   const setFont = (font: Font) => {
-    localStorage.setItem('font', font)
     _setFont(font)
   }
 
-  return <FontContext value={{ font, setFont }}>{children}</FontContext>
+  return (
+    <FontContext.Provider value={{ font, setFont }}>
+      {children}
+    </FontContext.Provider>
+  )
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

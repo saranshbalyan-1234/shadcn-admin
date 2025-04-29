@@ -74,7 +74,104 @@
   </head>
 
   <body class="group/body">
-    <div id="root"></div>
+    <div id="root">
+      <div
+        id="splash-screen"
+        style="
+          position: fixed;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: #fff;
+          z-index: 9999;
+          transition: opacity 0.5s ease-in-out;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+          "
+        >
+          <div
+            style="
+              height: 120px;
+              width: 120px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              animation: pulse 2s infinite;
+            "
+          >
+            <!-- Directly embedded SVG logo -->
+            <svg
+              class="logo-svg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="height: 100%; width: 100%"
+            >
+              <path
+                d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"
+              ></path>
+            </svg>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 8px;
+            "
+          >
+            <!-- <div style="width: 200px; height: 6px; background-color: #f1f5f9; border-radius: 9999px; overflow: hidden; position: relative;">
+              <div id="splash-progress" style="height: 100%; width: 0%; background-color: hsl(215.4 16.3% 46.9%); border-radius: 9999px; transition: width 0.2s ease-out;"></div>
+            </div> -->
+            <p
+              style="
+                color: #64748b;
+                font-size: 14px;
+                font-family: 'Inter', sans-serif;
+              "
+            >
+              Loading application...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #splash-screen {
+          background-color: oklch(0.129 0.042 0) !important;
+        }
+        #splash-screen p {
+          color: #94a3b8 !important;
+        }
+        #splash-screen .logo-svg {
+          stroke: #fff !important;
+        }
+      }
+    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

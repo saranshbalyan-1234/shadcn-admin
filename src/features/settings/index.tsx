@@ -1,17 +1,11 @@
 import { Outlet } from '@tanstack/react-router'
-import {
-  IconBrowserCheck,
-  IconNotification,
-  IconPalette,
-  IconTool,
-  IconUser,
-} from '@tabler/icons-react'
+import { AppWindow, BellRing, Palette, Wrench, User } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
+// import { ProfileDropdown } from '@/components/profile-dropdown'
+// import { Search } from '@/components/search'
+// import { ThemeSwitch } from '@/components/theme-switch'
 import SidebarNav from './components/sidebar-nav'
 
 export default function Settings() {
@@ -19,11 +13,11 @@ export default function Settings() {
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
+        {/* <Search /> */}
+        {/* <div className='ml-auto flex items-center space-x-4'>
           <ThemeSwitch />
           <ProfileDropdown />
-        </div>
+        </div> */}
       </Header>
 
       <Main fixed>
@@ -52,27 +46,27 @@ export default function Settings() {
 const sidebarNavItems = [
   {
     title: 'Profile',
-    icon: <IconUser size={18} />,
+    icon: <User size={18} />,
     href: '/settings',
   },
   {
     title: 'Account',
-    icon: <IconTool size={18} />,
+    icon: <Wrench size={18} />,
     href: '/settings/account',
   },
   {
     title: 'Appearance',
-    icon: <IconPalette size={18} />,
+    icon: <Palette size={18} />,
     href: '/settings/appearance',
   },
   {
     title: 'Notifications',
-    icon: <IconNotification size={18} />,
+    icon: <BellRing size={18} />,
     href: '/settings/notifications',
   },
   {
     title: 'Display',
-    icon: <IconBrowserCheck size={18} />,
+    icon: <AppWindow size={18} />,
     href: '/settings/display',
   },
 ]

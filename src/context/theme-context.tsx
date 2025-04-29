@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { generateThemeColors, applyThemeColors } from '@/lib/color-utils'
 
-type Theme = 'dark' | 'light' | 'system'
+export type Theme = 'dark' | 'light' | 'system'
+export type Radius = string
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -8,75 +10,108 @@ type ThemeProviderProps = {
   storageKey?: string
 }
 
-type ThemeProviderState = {
+type ThemeContextType = {
   theme: Theme
   setTheme: (theme: Theme) => void
+  primaryColor: string
+  setPrimaryColor: (color: string) => void
+  radius: Radius
+  setRadius: (radius: Radius) => void
+  getEffectiveTheme: () => 'light' | 'dark'
 }
 
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-}
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'vite-ui-theme',
-  ...props
+  storageKey = 'theme-mode',
 }: ThemeProviderProps) {
-  const [theme, _setTheme] = useState<Theme>(
+  const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
+  const [primaryColor, setPrimaryColor] = useState<string>(
+    () => localStorage.getItem('theme-color') || '#000000'
+  )
+  const [radius, setRadius] = useState<Radius>(
+    () => (localStorage.getItem('theme-radius') as Radius) || '0.5'
+  )
 
-  useEffect(() => {
-    const root = window.document.documentElement
+  const getEffectiveTheme = () => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    return theme === 'system'
+      ? mediaQuery.matches
+        ? 'dark'
+        : 'light'
+      : (theme as 'light' | 'dark')
+  }
 
-    const applyTheme = (theme: Theme) => {
-      root.classList.remove('light', 'dark') // Remove existing theme classes
-      const systemTheme = mediaQuery.matches ? 'dark' : 'light'
-      const effectiveTheme = theme === 'system' ? systemTheme : theme
-      root.classList.add(effectiveTheme) // Add the new theme class
-    }
+  const applyThemeSettings = () => {
+    const root = window.document.documentElement
+    const effectiveTheme = getEffectiveTheme()
 
+    // Apply theme class
+    root.classList.remove('light', 'dark')
+    root.classList.add(effectiveTheme)
+
+    // Apply radius
+    const remValue = parseFloat(radius)
+    document.documentElement.style.setProperty('--radius', `${remValue}rem`)
+
+    // Apply colors
+    const themeColors = generateThemeColors(primaryColor)
+    applyThemeColors(
+      effectiveTheme === 'dark' ? themeColors.dark : themeColors.light
+    )
+  }
+
+  // Apply theme settings whenever any theme-related value changes
+  useEffect(() => {
+    applyThemeSettings()
+  }, [theme, primaryColor, radius])
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const handleChange = () => {
       if (theme === 'system') {
-        applyTheme('system')
+        applyThemeSettings()
       }
     }
-
-    applyTheme(theme)
-
     mediaQuery.addEventListener('change', handleChange)
-
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [theme])
 
-  const setTheme = (theme: Theme) => {
-    localStorage.setItem(storageKey, theme)
-    _setTheme(theme)
-  }
-
-  const value = {
+  const contextValue: ThemeContextType = {
     theme,
-    setTheme,
+    setTheme: (newTheme: Theme) => {
+      setTheme(newTheme)
+      // Theme changes will be applied by the useEffect
+    },
+    primaryColor,
+    setPrimaryColor: (color: string) => {
+      setPrimaryColor(color)
+      // Color changes will be applied by the useEffect
+    },
+    radius,
+    setRadius: (value: Radius) => {
+      setRadius(value)
+      // Radius changes will be applied by the useEffect
+    },
+    getEffectiveTheme,
   }
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
-    </ThemeProviderContext.Provider>
+    </ThemeContext.Provider>
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext)
-
-  if (context === undefined)
+export function useTheme() {
+  const context = useContext(ThemeContext)
+  if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider')
-
+  }
   return context
 }

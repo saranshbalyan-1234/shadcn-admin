@@ -11,5 +11,7 @@ export function showSubmittedData(
         <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
       </pre>
     ),
+    closeButton: true,
+    duration: 2000,
   })
 }

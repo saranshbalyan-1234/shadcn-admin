@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import {
-  IconAdjustmentsHorizontal,
-  IconSortAscendingLetters,
-  IconSortDescendingLetters,
-} from '@tabler/icons-react'
+import { SlidersHorizontal, ArrowUpAZ, ArrowDownAZ } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -16,9 +12,9 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
+// import { ProfileDropdown } from '@/components/profile-dropdown'
+// import { Search } from '@/components/search'
+// import { ThemeSwitch } from '@/components/theme-switch'
 import { apps } from './data/apps'
 
 const appText = new Map<string, string>([
@@ -51,11 +47,11 @@ export default function Apps() {
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <Search />
-        <div className='ml-auto flex items-center gap-4'>
+        {/* <Search /> */}
+        {/* <div className='ml-auto flex items-center gap-4'>
           <ThemeSwitch />
           <ProfileDropdown />
-        </div>
+        </div> */}
       </Header>
 
       {/* ===== Content ===== */}
@@ -91,19 +87,19 @@ export default function Apps() {
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className='w-16'>
               <SelectValue>
-                <IconAdjustmentsHorizontal size={18} />
+                <SlidersHorizontal size={18} />
               </SelectValue>
             </SelectTrigger>
             <SelectContent align='end'>
               <SelectItem value='ascending'>
                 <div className='flex items-center gap-4'>
-                  <IconSortAscendingLetters size={16} />
+                  <ArrowUpAZ size={16} />
                   <span>Ascending</span>
                 </div>
               </SelectItem>
               <SelectItem value='descending'>
                 <div className='flex items-center gap-4'>
-                  <IconSortDescendingLetters size={16} />
+                  <ArrowDownAZ size={16} />
                   <span>Descending</span>
                 </div>
               </SelectItem>

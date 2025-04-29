@@ -84,17 +84,17 @@ declare module '@tanstack/react-router' {
 
 // Render the app
 const rootElement = document.getElementById('root')!
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-  root.render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme='light' storageKey='vite-ui-theme'>
-          <FontProvider>
-            <RouterProvider router={router} />
-          </FontProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </StrictMode>
-  )
-}
+// if (!rootElement.innerHTML) {
+const root = ReactDOM.createRoot(rootElement)
+root.render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme='light' storageKey='theme-mode'>
+        <FontProvider>
+          <RouterProvider router={router} />
+        </FontProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </StrictMode>
+)
+// }
