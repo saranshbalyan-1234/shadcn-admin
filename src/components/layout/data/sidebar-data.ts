@@ -20,7 +20,7 @@ import {
   Wrench,
   UserCog,
   UserX,
-  Users
+  Users,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
 

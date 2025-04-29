@@ -1,6 +1,5 @@
 import { Sprout } from 'lucide-react'
 
-
 export default function ComingSoon() {
   return (
     <div className='h-svh'>

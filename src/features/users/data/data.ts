@@ -1,9 +1,4 @@
-import {
-  DollarSign,
-  Shield,
-  Users,
-  UserCog,
-} from 'lucide-react'
+import { DollarSign, Shield, Users, UserCog } from 'lucide-react'
 import { UserStatus } from './schema'
 
 export const callTypes = new Map<UserStatus, string>([

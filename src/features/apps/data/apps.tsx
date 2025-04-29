@@ -1,8 +1,20 @@
 import {
-// Discord,
-// Docker,
-Figma, Github, Gitlab, Mail, BookOpen, FileText, Phone, Slack, CreditCard, Send, Trello, MessageCircleMore, Video } from 'lucide-react';
-
+  // Discord,
+  // Docker,
+  Figma,
+  Github,
+  Gitlab,
+  Mail,
+  BookOpen,
+  FileText,
+  Phone,
+  Slack,
+  CreditCard,
+  Send,
+  Trello,
+  MessageCircleMore,
+  Video,
+} from 'lucide-react'
 
 export const apps = [
   {

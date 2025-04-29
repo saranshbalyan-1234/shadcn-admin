@@ -259,10 +259,7 @@ export default function Chats() {
                         variant='ghost'
                         className='h-8 rounded-md'
                       >
-                        <Plus
-                          size={20}
-                          className='stroke-muted-foreground'
-                        />
+                        <Plus size={20} className='stroke-muted-foreground' />
                       </Button>
                       <Button
                         size='icon'

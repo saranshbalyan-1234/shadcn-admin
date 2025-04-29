@@ -1,11 +1,6 @@
 import React from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  Laptop,
-  Moon,
-  Sun,
-} from 'lucide-react'
+import { ArrowRight, Laptop, Moon, Sun } from 'lucide-react'
 import { useSearch } from '@/context/search-context'
 import { useTheme } from '@/context/theme-context'
 import {
