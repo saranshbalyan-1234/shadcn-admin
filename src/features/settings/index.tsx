@@ -47,7 +47,7 @@ const sidebarNavItems = [
   {
     title: 'Profile',
     icon: <User size={18} />,
-    href: '/settings',
+    href: '/settings/profile',
   },
   {
     title: 'Account',
