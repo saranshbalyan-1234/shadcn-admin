@@ -89,7 +89,7 @@ const root = ReactDOM.createRoot(rootElement)
 root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme='light' storageKey='theme-mode'>
+      <ThemeProvider>
         <FontProvider>
           <RouterProvider router={router} />
         </FontProvider>
