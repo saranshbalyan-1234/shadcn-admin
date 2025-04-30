@@ -61,7 +61,7 @@ export function Breadcrumbs() {
   const shouldShowDropdown = breadcrumbs.length > ITEMS_TO_DISPLAY
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className='overflow-hidden'>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
