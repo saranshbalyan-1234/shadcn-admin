@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Main } from '@/components/layout/main'
 import { apps } from './data/apps'
 
 const appText = new Map<string, string>([
@@ -41,7 +40,6 @@ export default function Apps() {
 
   return (
     <>
-      <Main fixed>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>
             App Integrations
@@ -120,7 +118,6 @@ export default function Apps() {
             </li>
           ))}
         </ul>
-      </Main>
     </>
   )
 }

@@ -1,13 +1,11 @@
 import { Outlet } from '@tanstack/react-router'
 import { AppWindow, BellRing, Palette, Wrench, User } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
-import { Main } from '@/components/layout/main'
 import SidebarNav from './components/sidebar-nav'
 
 export default function Settings() {
   return (
     <>
-      <Main fixed>
         <div className='space-y-0.5'>
           <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
             Settings
@@ -25,7 +23,6 @@ export default function Settings() {
             <Outlet />
           </div>
         </div>
-      </Main>
     </>
   )
 }
