@@ -45,16 +45,6 @@ export default function Apps() {
 
   return (
     <>
-      {/* ===== Top Heading ===== */}
-      <Header>
-        {/* <Search /> */}
-        {/* <div className='ml-auto flex items-center gap-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div> */}
-      </Header>
-
-      {/* ===== Content ===== */}
       <Main fixed>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>

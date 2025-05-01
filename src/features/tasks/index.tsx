@@ -13,14 +13,6 @@ import { tasks } from './data/tasks'
 export default function Tasks() {
   return (
     <TasksProvider>
-      <Header>
-        {/* <Search /> */}
-        {/* <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div> */}
-      </Header>
-
       <Main>
         <div className='mb-2 flex flex-wrap items-center justify-between space-y-2 gap-x-4'>
           <div>

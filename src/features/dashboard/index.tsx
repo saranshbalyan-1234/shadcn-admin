@@ -19,17 +19,6 @@ import { RecentSales } from './components/recent-sales'
 export default function Dashboard() {
   return (
     <>
-      {/* ===== Top Heading ===== */}
-      <Header>
-        {/* <TopNav links={topNav} /> */}
-        {/* <div className='ml-auto flex items-center space-x-4'>
-          <Search />
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div> */}
-      </Header>
-
-      {/* ===== Main ===== */}
       <Main>
         <div className='mb-2 flex items-center justify-between space-y-2'>
           <h1 className='text-2xl font-bold tracking-tight'>Dashboard</h1>

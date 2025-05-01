@@ -11,15 +11,6 @@ import SidebarNav from './components/sidebar-nav'
 export default function Settings() {
   return (
     <>
-      {/* ===== Top Heading ===== */}
-      <Header>
-        {/* <Search /> */}
-        {/* <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div> */}
-      </Header>
-
       <Main fixed>
         <div className='space-y-0.5'>
           <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>

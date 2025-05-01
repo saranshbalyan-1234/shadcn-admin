@@ -64,15 +64,6 @@ export default function Chats() {
 
   return (
     <>
-      {/* ===== Top Heading ===== */}
-      <Header>
-        {/* <Search /> */}
-        {/* <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div> */}
-      </Header>
-
       <Main fixed>
         <section className='flex h-full gap-6'>
           {/* Left Side */}
