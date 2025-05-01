@@ -1,9 +1,9 @@
-import Cookies from 'js-cookie';
-import { createFileRoute, Outlet } from '@tanstack/react-router';
-import { cn } from '@/lib/utils';
-import { SearchProvider } from '@/context/search-context';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/app-sidebar';
+import Cookies from 'js-cookie'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { SearchProvider } from '@/context/search-context'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/layout/app-sidebar'
 import { Main } from '@/components/layout/main'
 import SkipToMain from '@/components/skip-to-main'
 
@@ -29,7 +29,8 @@ function RouteComponent() {
             'group-data-[scroll-locked=1]/body:h-full',
             'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
           )}
-        ><Main>
+        >
+          <Main>
             <Outlet />
           </Main>
         </div>
