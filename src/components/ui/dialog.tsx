@@ -4,16 +4,41 @@ import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { XIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useIsMobile } from '@/hooks/use-mobile'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerFooter,
+} from './drawer'
 
 function Dialog({
+  shouldScaleBackground = true,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+}: React.ComponentProps<typeof DialogPrimitive.Root> & {
+  shouldScaleBackground?: boolean
+}) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <Drawer shouldScaleBackground={shouldScaleBackground} {...props} />
+  }
+
   return <DialogPrimitive.Root data-slot='dialog' {...props} />
 }
 
 function DialogTrigger({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <DrawerTrigger {...props} />
+  }
+
   return <DialogPrimitive.Trigger data-slot='dialog-trigger' {...props} />
 }
 
@@ -50,6 +75,16 @@ function DialogContent({
   children,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <DrawerContent className={className} {...props}>
+        {children}
+      </DrawerContent>
+    )
+  }
+
   return (
     <DialogPortal data-slot='dialog-portal'>
       <DialogOverlay />
@@ -72,6 +107,12 @@ function DialogContent({
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <DrawerHeader className={className} {...props} />
+  }
+
   return (
     <div
       data-slot='dialog-header'
@@ -82,6 +123,12 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <DrawerFooter className={className} {...props} />
+  }
+
   return (
     <div
       data-slot='dialog-footer'
@@ -98,6 +145,12 @@ function DialogTitle({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Title>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <DrawerTitle className={className} {...props} />
+  }
+
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
@@ -111,6 +164,12 @@ function DialogDescription({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return <DrawerDescription className={className} {...props} />
+  }
+
   return (
     <DialogPrimitive.Description
       data-slot='dialog-description'
