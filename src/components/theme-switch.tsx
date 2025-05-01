@@ -1,6 +1,6 @@
 // import { useEffect } from 'react'
 import { useNavigate } from '@tanstack/react-router';
-import { Check, Moon, Sun } from 'lucide-react';
+import { Check, Moon, Sun, Computer, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/context/theme-context';
 import type { Theme } from '@/context/theme-context';
@@ -47,28 +47,32 @@ export function ThemeSwitch() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => handleTheme('light')}>
-          Light{' '}
+        <DropdownMenuItem onClick={() => handleTheme('light')} className="flex items-center gap-2">
+          <Sun className="size-4" />
+          Light
           <Check
             size={14}
             className={cn('ml-auto', theme !== 'light' && 'hidden')}
           />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleTheme('dark')}>
+        <DropdownMenuItem onClick={() => handleTheme('dark')} className="flex items-center gap-2">
+          <Moon className="size-4" />
           Dark
           <Check
             size={14}
             className={cn('ml-auto', theme !== 'dark' && 'hidden')}
           />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleTheme('system')}>
+        <DropdownMenuItem onClick={() => handleTheme('system')} className="flex items-center gap-2">
+          <Computer className="size-4" />
           System
           <Check
             size={14}
             className={cn('ml-auto', theme !== 'system' && 'hidden')}
           />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() =>  navigate({ to: '/settings/appearance' })}>
+        <DropdownMenuItem onClick={() => navigate({ to: '/settings/appearance' })} className="flex items-center gap-2">
+          <Settings className="size-4" />
           More
         </DropdownMenuItem>
       </DropdownMenuContent>
