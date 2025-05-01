@@ -1,9 +1,10 @@
 // import { useEffect } from 'react'
-import { Check, Moon, Sun } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useTheme } from '@/context/theme-context'
-import type { Theme } from '@/context/theme-context'
-import { Button } from '@/components/ui/button'
+import { useNavigate } from '@tanstack/react-router';
+import { Check, Moon, Sun } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useTheme } from '@/context/theme-context';
+import type { Theme } from '@/context/theme-context';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,7 @@ import {
 
 export function ThemeSwitch() {
   const { theme, setTheme } = useTheme()
+  const navigate = useNavigate()
 
   /* Update theme-color meta tag
    * when theme is updated */
@@ -65,6 +67,9 @@ export function ThemeSwitch() {
             size={14}
             className={cn('ml-auto', theme !== 'system' && 'hidden')}
           />
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() =>  navigate({ to: '/settings/appearance' })}>
+          More
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
