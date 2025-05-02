@@ -74,37 +74,7 @@ export function Breadcrumbs() {
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {isMobile ? (
-                <Drawer open={open} onOpenChange={setOpen}>
-                  <DrawerTrigger aria-label='Toggle Menu'>
-                    <BreadcrumbEllipsis className='h-4 w-4' />
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <DrawerHeader className='text-left'>
-                      <DrawerTitle>Navigate to</DrawerTitle>
-                      <DrawerDescription>
-                        Select a page to navigate to.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <div className='grid gap-1 px-4'>
-                      {breadcrumbs.slice(0, -ITEMS_TO_DISPLAY).map((crumb) => (
-                        <Link
-                          key={crumb.path}
-                          to={crumb.path}
-                          className='py-1 text-sm'
-                        >
-                          {crumb.name}
-                        </Link>
-                      ))}
-                    </div>
-                    <DrawerFooter className='pt-4'>
-                      <DrawerClose asChild>
-                        <Button variant='outline'>Close</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </Drawer>
-              ) : (
+
                 <DropdownMenu open={open} onOpenChange={setOpen}>
                   <DropdownMenuTrigger
                     className='flex items-center gap-1'
@@ -120,7 +90,7 @@ export function Breadcrumbs() {
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              )}
+
             </BreadcrumbItem>
           </>
         )}

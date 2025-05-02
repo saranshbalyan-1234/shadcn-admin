@@ -1,12 +1,36 @@
+'use client'
+
 import * as React from 'react'
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useIsMobile } from '@/hooks/use-mobile'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+} from './drawer'
+
+const DropdownMenuContext = React.createContext<{
+  isMobile: boolean
+}>({
+  isMobile: false
+})
 
 function DropdownMenu({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot='dropdown-menu' {...props} />
+  const isMobile = useIsMobile()
+  
+  return (
+    <DropdownMenuContext.Provider value={{ isMobile }}>
+      {isMobile ? (
+        <Drawer {...props} />
+      ) : (
+        <DropdownMenuPrimitive.Root data-slot='dropdown-menu' {...props} />
+      )}
+    </DropdownMenuContext.Provider>
+  )
 }
 
 function DropdownMenuPortal({
@@ -20,6 +44,12 @@ function DropdownMenuPortal({
 function DropdownMenuTrigger({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return <DrawerTrigger {...props} />
+  }
+
   return (
     <DropdownMenuPrimitive.Trigger
       data-slot='dropdown-menu-trigger'
@@ -33,6 +63,12 @@ function DropdownMenuContent({
   sideOffset = 4,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return <DrawerContent className={className} {...props} />
+  }
+
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -60,11 +96,29 @@ function DropdownMenuItem({
   className,
   inset,
   variant = 'default',
+  children,
+  onClick,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
   inset?: boolean
   variant?: 'default' | 'destructive'
 }) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div 
+        className={cn(
+          "flex cursor-pointer items-center gap-2 rounded-sm px-4 py-2 text-sm hover:bg-secondary",
+          className
+        )}
+        onClick={onClick as any}
+      >
+        {children}
+      </div>
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.Item
       data-slot='dropdown-menu-item'
@@ -75,7 +129,9 @@ function DropdownMenuItem({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </DropdownMenuPrimitive.Item>
   )
 }
 
@@ -83,8 +139,28 @@ function DropdownMenuCheckboxItem({
   className,
   children,
   checked,
+  onClick,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          "flex cursor-pointer items-center gap-2 rounded-sm py-2 px-4 text-sm hover:bg-secondary",
+          className
+        )}
+        onClick={onClick as any}
+      >
+        <span className='pointer-events-none flex h-3.5 w-3.5 items-center justify-center'>
+          {checked && <CheckIcon className='h-4 w-4' />}
+        </span>
+        {children}
+      </div>
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.CheckboxItem
       data-slot='dropdown-menu-checkbox-item'
@@ -119,8 +195,25 @@ function DropdownMenuRadioGroup({
 function DropdownMenuRadioItem({
   className,
   children,
+  onClick,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          "flex cursor-pointer items-center gap-2 rounded-sm py-2 px-4 text-sm hover:bg-secondary",
+          className
+        )}
+        onClick={onClick as any}
+      >
+        {children}
+      </div>
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.RadioItem
       data-slot='dropdown-menu-radio-item'
@@ -143,10 +236,26 @@ function DropdownMenuRadioItem({
 function DropdownMenuLabel({
   className,
   inset,
+  children,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
   inset?: boolean
 }) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          'px-4 py-2 text-sm font-medium',
+          className
+        )}
+      >
+        {children}
+      </div>
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.Label
       data-slot='dropdown-menu-label'
@@ -164,6 +273,17 @@ function DropdownMenuSeparator({
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn('bg-border -mx-1 my-1 h-px', className)}
+        {...props}
+      />
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.Separator
       data-slot='dropdown-menu-separator'
@@ -203,6 +323,23 @@ function DropdownMenuSubTrigger({
 }: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
   inset?: boolean
 }) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          'flex cursor-pointer items-center rounded-sm px-4 py-2 text-sm hover:bg-secondary',
+          className
+        )}
+        {...props}
+      >
+        {children}
+        <ChevronRightIcon className='ml-auto size-4' />
+      </div>
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.SubTrigger
       data-slot='dropdown-menu-sub-trigger'
@@ -223,6 +360,20 @@ function DropdownMenuSubContent({
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
+  const { isMobile } = React.useContext(DropdownMenuContext)
+
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          'bg-popover text-popover-foreground pl-4 pt-1',
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+
   return (
     <DropdownMenuPrimitive.SubContent
       data-slot='dropdown-menu-sub-content'
