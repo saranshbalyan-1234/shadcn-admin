@@ -265,7 +265,9 @@ function DropdownMenuLabel({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </DropdownMenuPrimitive.Label>
   )
 }
 
