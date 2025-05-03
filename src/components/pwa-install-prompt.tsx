@@ -23,6 +23,12 @@ export function PwaInstallPrompt() {
     // Set iOS flag for showing different installation instructions
     if (isIosDevice) {
       setIsIos(true)
+      
+      // For iOS, we need to manually show the prompt since 
+      // Safari iOS doesn't support beforeinstallprompt event
+      if (!isAppInstalled) {
+          setIsVisible(true)
+      }
     }
 
     if (isAppInstalled) {
@@ -80,8 +86,20 @@ export function PwaInstallPrompt() {
       </CardHeader>
       <CardContent>
         {isIos ? (
-          <div className="text-sm">
-            Tap the share button <span className="inline-block">⎙</span> and select &quot;Add to Home Screen&quot; to install
+          <div className="text-sm space-y-2">
+            <p>To install this app on your iOS device:</p>
+            <ol className="list-decimal pl-5 space-y-1">
+              <li>Tap the share icon 
+                <svg xmlns="http://www.w3.org/2000/svg" className="inline-block ml-1 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <polyline points="16 6 12 2 8 6"></polyline>
+                  <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+                 in Safari's toolbar
+              </li>
+              <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+              <li>Tap <strong>"Add"</strong> in the confirmation dialog</li>
+            </ol>
           </div>
         ) : (
           <div className="text-sm">
