@@ -25,7 +25,8 @@ export default defineConfig({
         'images/favicon_light.svg', 
         'images/favicon.png', 
         'images/favicon_light.png',
-        'offline.html'
+        'offline.html',
+        'index.html'
       ],
       manifest: {
         name: 'Shadcn Admin',
@@ -59,8 +60,8 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-        navigateFallback: null,
-        navigateFallbackDenylist: [/^\/api/],
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/, /\.[^.\/]+$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

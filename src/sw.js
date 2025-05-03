@@ -11,6 +11,15 @@ self.addEventListener('message', (event) => {
   }
 })
 
+// Add install event to cache index.html explicitly
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open('app-shell-cache').then((cache) => {
+      return cache.add('/index.html');
+    })
+  );
+});
+
 // This will be replaced by the workbox injection
 precacheAndRoute(self.__WB_MANIFEST)
 
@@ -49,14 +58,26 @@ registerRoute(
   })
 )
 
-// Define offline fallback
-const offlineHandler = ({ event }) => {
-  return fetch(event.request).catch(() => caches.match('/offline.html'))
+// Define SPA fallback for all navigation requests
+const appShellHandler = ({ event }) => {
+  // Try to fetch from network first
+  return fetch(event.request)
+    .catch(() => {
+      // For navigation requests, serve index.html from cache to enable client-side routing
+      if (event.request.mode === 'navigate') {
+        return caches.match('/index.html')
+          .then(response => {
+            return response || caches.match('/offline.html');
+          });
+      }
+      // For non-navigation requests that fail, show the offline page
+      return caches.match('/offline.html');
+    });
 }
 
-// Register a navigation route for offline fallback
-const navigationRoute = new NavigationRoute(offlineHandler, {
-  // Exclude API requests from offline handling
+// Register a navigation route for SPA handling
+const navigationRoute = new NavigationRoute(appShellHandler, {
+  // Exclude API requests from navigation handling
   denylist: [/^\/api/],
 })
 
@@ -69,12 +90,12 @@ registerRoute(
     cacheName: 'static-resources',
   })
 )
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match('/offline.html')
-      })
-    )
-  }
-})
+// self.addEventListener('fetch', (event) => {
+//   if (event.request.mode === 'navigate') {
+//     event.respondWith(
+//       fetch(event.request).catch(() => {
+//         return caches.match('/offline.html')
+//       })
+//     )
+//   }
+// })
