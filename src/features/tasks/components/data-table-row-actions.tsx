@@ -31,7 +31,7 @@ export function DataTableRowActions<TData>({
   const { setOpen, setCurrentRow } = useTasks()
 
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu >
       <DropdownMenuTrigger asChild>
         <Button
           variant='ghost'

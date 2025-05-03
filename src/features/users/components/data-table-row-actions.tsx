@@ -21,7 +21,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow } = useUsers()
   return (
     <>
-      <DropdownMenu modal={false}>
+      <DropdownMenu >
         <DropdownMenuTrigger asChild>
           <Button
             variant='ghost'
