@@ -27,6 +27,11 @@
       media="(prefers-color-scheme: dark)"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Shadcn Admin" />
+    <link rel="apple-touch-icon" href="/images/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- Primary Meta Tags -->
     <title>Shadcn Admin</title>
@@ -70,7 +75,8 @@
       rel="stylesheet"
     />
 
-    <meta name="theme-color" content="#fff" />
+    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)" />
   </head>
 
   <body class="group/body">
