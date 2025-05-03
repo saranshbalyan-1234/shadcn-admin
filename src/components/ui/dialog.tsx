@@ -80,6 +80,9 @@ function DialogContent({
   if (isMobile) {
     return (
       <DrawerContent className={className} {...props}>
+        <div className="sr-only">
+          <DrawerTitle>Dialog</DrawerTitle>
+        </div>
         {children}
       </DrawerContent>
     )
