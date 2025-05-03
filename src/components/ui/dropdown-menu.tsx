@@ -66,7 +66,7 @@ function DropdownMenuContent({
   const { isMobile } = React.useContext(DropdownMenuContext)
 
   if (isMobile) {
-    return <DrawerContent className={className} {...props} />
+    return <DrawerContent className={cn("w-full px-0", className)} {...props} />
   }
 
   return (
@@ -109,7 +109,7 @@ function DropdownMenuItem({
     return (
       <div 
         className={cn(
-          "flex cursor-pointer items-center gap-2 rounded-sm px-4 py-2 text-sm hover:bg-secondary",
+          "flex cursor-pointer items-center gap-2 rounded-sm px-4 py-3 text-sm hover:bg-secondary w-full",
           className
         )}
         onClick={onClick as any}

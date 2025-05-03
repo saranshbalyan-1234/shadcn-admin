@@ -36,7 +36,7 @@ if ('serviceWorker' in navigator) {
                     label: 'Reload',
                     onClick: () => window.location.reload()
                   },
-                  duration: 10000 // Show for 10 seconds
+                  duration: 50000 // Show for 10 seconds
                 });
               }
             });

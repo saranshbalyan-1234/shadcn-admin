@@ -52,7 +52,7 @@ export function TeamSwitcher({
           <DropdownMenuContent
             className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
             align='start'
-            side={isMobile ? 'bottom' : 'right'}
+            side={'bottom'}
             sideOffset={4}
           >
             <DropdownMenuLabel className='text-muted-foreground text-xs'>
